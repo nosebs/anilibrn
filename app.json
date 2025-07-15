@@ -3,7 +3,6 @@
     "name": "anilibrn",
     "slug": "anilibrn",
     "version": "1.0.0",
-    "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "anilibrn",
     "userInterfaceStyle": "automatic",
@@ -32,6 +31,13 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
         }
       ]
     ],
