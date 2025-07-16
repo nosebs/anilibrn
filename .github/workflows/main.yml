@@ -28,12 +28,10 @@ jobs:
         if: ${{ inputs.environment == 'release' || github.ref }}
         run: |
           echo "${{ secrets.ANLIBRN_UPLOAD_STORE_FILE_CONTENT }}" | base64 --decode > ~/${{ secrets.ANLIBRN_UPLOAD_STORE_FILE }}.keystore
-          cat <<EOF > ~/gradle.properties
-          ANLIBRN_UPLOAD_STORE_FILE=~/${{ secrets.ANLIBRN_UPLOAD_STORE_FILE }}
-          ANLIBRN_UPLOAD_KEY_ALIAS=${{ secrets.ANLIBRN_UPLOAD_KEY_ALIAS }}
-          ANLIBRN_UPLOAD_STORE_PASSWORD=${{ secrets.ANLIBRN_UPLOAD_STORE_PASSWORD }}
-          ANLIBRN_UPLOAD_KEY_PASSWORD=${{ secrets.ANLIBRN_UPLOAD_KEY_PASSWORD }}
-          EOF
+          export ANLIBRN_UPLOAD_STORE_FILE=~/${{ secrets.ANLIBRN_UPLOAD_STORE_FILE }}
+          export ANLIBRN_UPLOAD_KEY_ALIAS=${{ secrets.ANLIBRN_UPLOAD_KEY_ALIAS }}
+          export ANLIBRN_UPLOAD_STORE_PASSWORD=${{ secrets.ANLIBRN_UPLOAD_STORE_PASSWORD }}
+          export ANLIBRN_UPLOAD_KEY_PASSWORD=${{ secrets.ANLIBRN_UPLOAD_KEY_PASSWORD }}
 
       - name: Make gradlew executable
         run: cd android && chmod +x ./gradlew
