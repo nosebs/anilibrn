@@ -103,11 +103,11 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('ANLIBRN_UPLOAD_STORE_FILE')) {
-                storeFile file(ANLIBRN_UPLOAD_STORE_FILE)
-                storePassword ANLIBRN_UPLOAD_STORE_PASSWORD
-                keyAlias ANLIBRN_UPLOAD_KEY_ALIAS
-                keyPassword ANLIBRN_UPLOAD_KEY_PASSWORD
+            if (System.getenv('ANLIBRN_UPLOAD_STORE_FILE')) {
+                storeFile file(System.getenv('ANLIBRN_UPLOAD_STORE_FILE'))
+                storePassword System.getenv('ANLIBRN_UPLOAD_STORE_PASSWORD')
+                keyAlias System.getenv('ANLIBRN_UPLOAD_KEY_ALIAS')
+                keyPassword System.getenv('ANLIBRN_UPLOAD_KEY_PASSWORD')
             }
         }
     }
@@ -118,7 +118,7 @@ android {
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            //signingConfig signingConfigs.debug
             shrinkResources (findProperty('android.enableShrinkResourcesInReleaseBuilds')?.toBoolean() ?: false)
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"

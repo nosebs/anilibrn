@@ -37,20 +37,14 @@
       [
         "react-native-video",
         {
-          "enableAndroidPictureInPicture": true
+          "enableAndroidPictureInPicture": true,
+          "enableNotificationControls": true
         }
       ],
       "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "b3c7f4e0-45c8-45ee-b0d7-f5b66c829f11"
-      }
-    },
-    "owner": "obed666"
+    }
   }
 }
