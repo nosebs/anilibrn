@@ -3,7 +3,6 @@ import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { sendRequest } from "@/utils/fetcher";
 import { ANLIB_API_BASE } from "@/utils/s";
-import { H1 } from "@expo/html-elements";
 import React from "react";
 import { FlatList, NativeSyntheticEvent, TextInputSubmitEditingEventData } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,23 +22,14 @@ export default function Search() {
             <Input className="my-1" isDisabled={isMutating}>
                 <InputField
                     variant="rounded"
-                    placeholder="password"
+                    placeholder="Поиск"
                     value={inputValue}
                     onSubmitEditing={updateSearchQuery}
                     onChangeText={(text) => setInputValue(text)}
                 />
             </Input>
             {error && <Text>{error.toString()} {error.status}</Text>}
-            {data && !isMutating ? <FlatList data={data} keyExtractor={item => item.id} renderItem={({ item }) => <ReleaseCard release={item}/>}/> : <Text>Loading</Text>}
-            <H1>123
-                123
-                1
-                23
-                123
-                12
-                3
-
-            </H1>
+            {(data && !isMutating) && <FlatList data={data} keyExtractor={item => item.id} renderItem={({ item }) => <ReleaseCard release={item}/>}/>}
         </SafeAreaView>
     )
 }

@@ -1,11 +1,15 @@
 import { Card } from "@/components/ui/card";
 import { Heading } from "@/components/ui/heading";
 import { Image } from "@/components/ui/image";
+import { Pressable } from "@/components/ui/pressable";
 import { Text } from "@/components/ui/text";
 import { fetcher } from "@/utils/fetcher";
 import { ANLIB_API_BASE, ANLIB_BASE } from "@/utils/s";
 import { router, useGlobalSearchParams } from "expo-router";
-import { Pressable, ScrollView } from "react-native";
+import * as SecureStore from 'expo-secure-store';
+import { Suspense } from "react";
+import { ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import useSWR from "swr";
 
 export default function Release() {
@@ -19,8 +23,16 @@ export default function Release() {
     if(error.status == 404) return <Text>Релиз не найден</Text> 
     return <Text>{error.message}</Text>
   }
+
+  function secondsToMMSS(seconds: number) {
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${minutes}:${secs < 10 ? '0' : ''}${secs}`;
+  }
+  
   return (
-    <ScrollView>
+    <SafeAreaView edges={['left', 'right']}>
+      <ScrollView>
         <Image
           source={{
             uri: ANLIB_BASE + data.poster.src,
@@ -39,14 +51,25 @@ export default function Release() {
           <Card size="md" variant="elevated" className="m-1">
               {
                 data.episodes.map((v) => (
-                  <Pressable className="m-1" key={v.id} onPress={() => router.navigate("/player/" + v.id)}>
+                  <Pressable className="m-1"  key={v.id} onPress={() => router.navigate("/player/" + v.id)}>
                     <Text>{v.ordinal} - {v.name}</Text>
                     <Text>Обновлено {new Date(v.updated_at).toString()}</Text>
+                    <Suspense>
+                      {
+                        SecureStore.getItemAsync(`ep_ct_${v.id}`).then((value) => {
+                          if(value) {
+                            return <Text>Продолжить с {secondsToMMSS(parseFloat(value))} сек</Text>
+                          }
+                        })
+                      }
+                    </Suspense>
                   </Pressable>
                 ))
               }
           </Card>
         }
       </ScrollView>
+    </SafeAreaView>
+    
   )
 }

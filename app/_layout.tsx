@@ -16,7 +16,7 @@ export default function RootLayout() {
 
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "red" }}>
+    <SafeAreaView style={{ flex: 1 }}>
       <Text>{error.message}</Text>
       <Text onPress={retry}>Try Again?</Text>
     </SafeAreaView>
@@ -29,7 +29,7 @@ function RootLayoutNav() {
   return (
     <GluestackUIProvider mode={(colorScheme ?? "light") as "light" | "dark"}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
+        <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         </Stack>
       </ThemeProvider>

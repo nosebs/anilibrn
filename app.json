@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "anilibrn",
-    "slug": "anilibrn",
+    "slug": "anlibrn",
     "version": "1.0.0",
     "icon": "./assets/images/icon.png",
     "scheme": "anilibrn",
@@ -15,7 +15,8 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "vip.nosebs.anilibrn"
     },
     "web": {
       "bundler": "metro",
@@ -34,15 +35,22 @@
         }
       ],
       [
-        "expo-video",
+        "react-native-video",
         {
-          "supportsBackgroundPlayback": true,
-          "supportsPictureInPicture": true
+          "enableAndroidPictureInPicture": true
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "b3c7f4e0-45c8-45ee-b0d7-f5b66c829f11"
+      }
+    },
+    "owner": "obed666"
   }
 }
