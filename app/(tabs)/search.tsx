@@ -4,32 +4,51 @@ import { Text } from "@/components/ui/text";
 import { sendRequest } from "@/utils/fetcher";
 import { ANLIB_API_BASE } from "@/utils/s";
 import React from "react";
-import { FlatList, NativeSyntheticEvent, TextInputSubmitEditingEventData } from "react-native";
+import {
+  FlatList,
+  NativeSyntheticEvent,
+  TextInputSubmitEditingEventData,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import useSWRMutation from 'swr/mutation';
+import useSWRMutation from "swr/mutation";
 export default function Search() {
-    const [inputValue, setInputValue] = React.useState("")
+  const [inputValue, setInputValue] = React.useState("");
 
-    const { trigger, isMutating, data, error } = useSWRMutation(ANLIB_API_BASE + "/app/search/releases?query=" + inputValue, sendRequest)
+  const { trigger, isMutating, data, error } = useSWRMutation(
+    ANLIB_API_BASE + "/app/search/releases?query=" + inputValue,
+    sendRequest,
+  );
 
-    function updateSearchQuery(ev: NativeSyntheticEvent<TextInputSubmitEditingEventData>) {
-        setInputValue(inputValue)
-        trigger()
-    }
+  function updateSearchQuery(
+    ev: NativeSyntheticEvent<TextInputSubmitEditingEventData>,
+  ) {
+    setInputValue(inputValue);
+    trigger();
+  }
 
-    return (
-        <SafeAreaView>
-            <Input className="my-1" isDisabled={isMutating}>
-                <InputField
-                    variant="rounded"
-                    placeholder="Поиск"
-                    value={inputValue}
-                    onSubmitEditing={updateSearchQuery}
-                    onChangeText={(text) => setInputValue(text)}
-                />
-            </Input>
-            {error && <Text>{error.toString()} {error.status}</Text>}
-            {(data && !isMutating) && <FlatList data={data} keyExtractor={item => item.id} renderItem={({ item }) => <ReleaseCard release={item}/>}/>}
-        </SafeAreaView>
-    )
+  return (
+    <SafeAreaView>
+      <Input className="my-1" isDisabled={isMutating}>
+        <InputField
+          variant="rounded"
+          placeholder="Поиск"
+          value={inputValue}
+          onSubmitEditing={updateSearchQuery}
+          onChangeText={(text) => setInputValue(text)}
+        />
+      </Input>
+      {error && (
+        <Text>
+          {error.toString()} {error.status}
+        </Text>
+      )}
+      {data && !isMutating && (
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ReleaseCard release={item} />}
+        />
+      )}
+    </SafeAreaView>
+  );
 }

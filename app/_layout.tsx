@@ -35,4 +35,4 @@ function RootLayoutNav() {
       </ThemeProvider>
     </GluestackUIProvider>
   );
-} 
+}
