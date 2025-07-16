@@ -51,14 +51,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: "android/app/build/outputs/apk/debug/app-debug.apk"
-
-      - name: Create Release
-        id: create_release
-        if: ${{ inputs.environment == 'release' || github.ref }}
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag' || inputs.environment == 'release'
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          prerelease: true
+          files: "android/app/build/outputs/apk/release/app-release.apk"
