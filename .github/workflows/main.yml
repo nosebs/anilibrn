@@ -7,7 +7,10 @@ on:
       environment:
         required: true
         type: string
-
+        default: "debug"
+  push:
+    tags:
+      - 'v*'
 jobs:
   build-android:
     runs-on: ubuntu-latest
@@ -22,7 +25,7 @@ jobs:
         run: bun install
 
       - name: Extract key
-        if: ${{ inputs.environment == 'release' }}
+        if: ${{ inputs.environment == 'release' || github.ref }}
         run: |
           echo "${{ secrets.ANLIBRN_UPLOAD_STORE_FILE_CONTENT }}" | base64 --decode > ~/${{ secrets.ANLIBRN_UPLOAD_STORE_FILE }}.keystore
           cat <<EOF > ~/gradle.properties
@@ -32,14 +35,32 @@ jobs:
           ANLIBRN_UPLOAD_KEY_PASSWORD=${{ secrets.ANLIBRN_UPLOAD_KEY_PASSWORD }}
           EOF
 
-      - name: Make Gradlew Executable
+      - name: Make gradlew executable
         run: cd android && chmod +x ./gradlew
 
-      - name: Build Android ${{inputs.environment == 'release' && 'Release' || 'Debug'}}
+      - name: Build android ${{inputs.environment == 'release' || github.ref && 'Release' || 'Debug'}}
         run: |
-          cd android && ./gradlew assemble${{inputs.environment == 'release' && 'Release' || 'Debug'}} --no-daemon
+          cd android && ./gradlew assemble${{inputs.environment == 'release' || github.ref && 'Release' || 'Debug'}} --no-daemon
 
-      - name: Upload Artifact
+      - name: Upload release artifact
+        if: ${{ inputs.environment == 'release' || github.ref }}
         uses: actions/upload-artifact@v4
         with:
           path: "android/app/build/outputs/apk/release/app-release.apk"
+
+      - name: Upload debug artifact
+        if: ${{ inputs.environment != 'release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          path: "android/app/build/outputs/apk/debug/app-debug.apk"
+
+      - name: Create Release
+        id: create_release
+        if: ${{ inputs.environment == 'release' || github.ref }}
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          prerelease: true
