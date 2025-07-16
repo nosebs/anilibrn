@@ -21,6 +21,17 @@ jobs:
       - name: Install modules
         run: bun install
 
+      - name: Extract key
+        if: ${{ inputs.environment == 'release' }}
+        run: |
+          echo "${{ secrets.ANLIBRN_UPLOAD_STORE_FILE_CONTENT }}" | base64 --decode > ~/${{ secrets.ANLIBRN_UPLOAD_STORE_FILE }}.keystore
+          cat <<EOF > ~/gradle.properties
+          ANLIBRN_UPLOAD_STORE_FILE=~/${{ secrets.ANLIBRN_UPLOAD_STORE_FILE }}
+          ANLIBRN_UPLOAD_KEY_ALIAS=${{ secrets.ANLIBRN_UPLOAD_KEY_ALIAS }}
+          ANLIBRN_UPLOAD_STORE_PASSWORD=${{ secrets.ANLIBRN_UPLOAD_STORE_PASSWORD }}
+          ANLIBRN_UPLOAD_KEY_PASSWORD=${{ secrets.ANLIBRN_UPLOAD_KEY_PASSWORD }}
+          EOF
+
       - name: Make Gradlew Executable
         run: cd android && chmod +x ./gradlew
 
