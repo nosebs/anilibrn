@@ -36,9 +36,9 @@ jobs:
       - name: Make gradlew executable
         run: cd android && chmod +x ./gradlew
 
-      - name: Build android ${{inputs.environment == 'release' || github.ref && 'Release' || 'Debug'}}
+      - name: Build android ${{(inputs.environment == 'release' || github.ref) && 'Release' || 'Debug'}}
         run: |
-          cd android && ./gradlew assemble${{inputs.environment == 'release' || github.ref && 'Release' || 'Debug'}} --no-daemon
+          cd android && ./gradlew assemble${{(inputs.environment == 'release' || github.ref) && 'Release' || 'Debug'}} --no-daemon
 
       - name: Upload release artifact
         if: ${{ inputs.environment == 'release' || github.ref }}
